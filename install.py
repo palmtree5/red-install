@@ -5,6 +5,14 @@ from subprocess import call
 import time
 
 
+def alpine_install():
+    raise NotImplementedError("Alpine isn't supported by this install script!")
+
+
+def archlinux_install():
+    raise NotImplementedError("Archlinux isn't supported by this install script!")
+
+
 def fedora_install():
     try:
         import dnf
@@ -20,6 +28,22 @@ def fedora_install():
     base.fill_sack(load_system_repo='auto')
 
 
+def opensuse_422_install():
+    pass
+
+
+def raspi_install():
+    try:
+        import apt
+    except ImportError:
+        print("You need to apt install python-apt!")
+        raise
+
+
+def macos_install():
+    pass
+
+
 def ubuntu_xenial_install():
     try:
         import apt
@@ -27,13 +51,14 @@ def ubuntu_xenial_install():
         print("You need to apt install python-apt!")
         raise
     cache = apt.cache.Cache()
-    cache.update()
+
     print("Installing prerequisite packages")
     pkgs = ["python3.5-dev", "python3-pip", "build-essential", "libssl-dev", "libffi-dev", "git", "ffmpeg", "libopus-dev", "unzip"]
     for pkg in pkgs:
+        cache.update()
         cur = cache[pkg]
         cur.mark_install()
-    cache.commit()
+        cache.commit()
     call(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
 
 
