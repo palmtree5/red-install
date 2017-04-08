@@ -1,7 +1,7 @@
 from __future__ import print_function
 import os
 import sys
-from subprocess import call
+from subprocess import check_output
 import time
 
 
@@ -72,7 +72,7 @@ def ubuntu_xenial_install():
         cur.mark_install()
     cache.commit()
     print("Downloading the bot's files")
-    call(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
+    check_output(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
     uid = os.stat(".").st_uid
     gid = os.stat(".").st_gid
     path = "Red-DiscordBot"
@@ -84,42 +84,36 @@ def ubuntu_xenial_install():
 
 
 def debian_jessie_install():
-    try:
-        import apt
-    except ImportError:
-        print("You need to apt install python-apt!")
-        raise
 
     with open("/etc/apt/sources.list", "a") as fout:
         fout.write("deb http://httpredir.debian.org/debian jessie-backports main contrib non-free")
-    cache = apt.cache.Cache()
 
     print("Installing prereqisite packages")
 
-    cache.update()
-
+    check_output(["apt", "update"])
     pkgs = ["build-essential", "libssl-dev", "libffi-dev", "git", "ffmpeg", "libopus-dev", "unzip"]
+    apt_install = ["apt", "install"]
     for pkg in pkgs:
-        cache.update()
-        cur = cache[pkg]
-        cur.mark_install()
-    cache.commit()
+        apt_install.append(pkg)
+    apt_install.append("-y")
+    check_output(apt_install)
     maindir = os.getcwd()
+    
     print("Installing the needed version of Python...")
-    call(["wget", "https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz"])
-    call(["tar", "xvf", "Python-3.6.0.tgz"])
+    check_output(["wget", "https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz"])
+    check_output(["tar", "xvf", "Python-3.6.0.tgz"])
     os.chdir("Python-3.6.0")
-    call(["./configure", "--enable-optimizations"])
+    check_output(["./configure", "--enable-optimizations"])
     import multiprocessing as mp
     core_count = mp.cpu_count()
     j_arg = "-j{}".format(core_count)
-    call(["make", j_arg])
-    call(["make", "altinstall"])
+    check_output(["make", j_arg])
+    check_output(["make", "altinstall"])
     os.chdir(maindir)
-    call(["wget", "https://bootstrap.pypa.io/get-pip.py"])
-    call(["python3.6", "get-pip.py"])
+    check_output(["wget", "https://bootstrap.pypa.io/get-pip.py"])
+    check_output(["python3.6", "get-pip.py"])
     print("Downloading the bot's files")
-    call(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
+    check_output(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
     uid = os.stat(".").st_uid
     gid = os.stat(".").st_gid
     path = "Red-DiscordBot"
