@@ -89,6 +89,9 @@ def debian_jessie_install():
     except ImportError:
         print("You need to apt install python-apt!")
         raise
+
+    with open("/etc/apt/sources.list", "a") as fout:
+        fout.write("deb http://httpredir.debian.org/debian jessie-backports main contrib non-free")
     cache = apt.cache.Cache()
 
     print("Installing prereqisite packages")
