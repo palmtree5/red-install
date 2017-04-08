@@ -140,6 +140,7 @@ def main():
     while selected != 0:
         print("Red installation menu. Select your OS")
         print("1. Ubuntu 16.04")
+        print("2. Debian 8")
         try:
             selected = int(input("Enter your selection: "))
         except ValueError:
