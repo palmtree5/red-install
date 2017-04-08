@@ -149,6 +149,9 @@ def main():
             if selected == 1:
                 ubuntu_xenial_install()
                 return
+            elif selected == 2:
+                debian_jessie_install()
+                return
             elif selected == 0:
                 print("Exiting...")
                 return
