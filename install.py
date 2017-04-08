@@ -58,7 +58,7 @@ def ubuntu_xenial_install():
         cache.update()
         cur = cache[pkg]
         cur.mark_install()
-        cache.commit()
+    cache.commit()
     call(["git", "clone", "-b", "develop", "https://github.com/Twentysix26/Red-DiscordBot"])
 
 
