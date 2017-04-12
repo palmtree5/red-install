@@ -114,6 +114,57 @@ opensuse422()
     echo "Then you may run the bot by selecting option 1 or 2 on the main menu"
 }
 
+raspbian()
+{
+    echo "Installing Red for Raspbian"
+    echo "Enter the username of the account the bot will be run as: "
+    read name
+    echo "THIS SCRIPT IS EXPIREMENTAL AT BEST AND WILL NUKE THE PLANET AT WORST"
+    echo "THERE IS NO GUARANTEE THAT THIS SCRIPT WILL WORK!"
+    echo "THIS SCRIPT ISN'T RESPONSIBLE FOR ANY DAMAGE CAUSED TO YOUR PI!"
+    echo "THIS IS THE LAST CHANGE TO PRESS 'CTRL+C'"
+    echo "Waiting 10 secconds"
+    sleep 10
+    echo "Estimated install time: about 45 min"
+    echo "-----"
+    echo "STARTING INSTALLING OF PREREQUIREMENTS!"
+    echo "PLEASE WAIT WHILE I'M ARE PREPARING A CUP OF TEA,"
+    echo "-----"
+    apt-get update
+    apt-get install -y libbz2-dev libopus-dev liblzma-dev libsqlite3-dev libncurses5-dev libgdbm-dev zlib1g-dev libreadline-dev git unzip libssl-dev tk-dev build-essential libffi-dev libav-tools
+    echo "-----"
+    echo "STARTING TO BUILD PYTHON... Somehow"
+    echo "DO YOU WANT SOME BISCUITS WITH THAT?"
+    echo "-----"
+    sleep 5
+    release=3.5.1
+    mkdir -p ~/redinstall/python3
+    cd ~/redinstall/python3
+    wget https://www.python.org/ftp/python/$release/Python-$release.tar.xz
+    tar xvf Python-$release.tar.xz
+    cd Python-$release
+    ./configure
+    make -j$(nproc)
+    make install -j$redcores
+    cd ~/redinstall
+    echo "-----"
+    echo "PYTHON IS INSTALLED! \o/"
+    echo "INSTALLING PIP3 AND ITS MODULES"
+    echo "YOU STILL DIDN'T TOUCH MY TEA YET?"
+    echo "DON'T YOU LIKE TEA? :("
+    echo "-----"
+    sleep 5
+    wget https://bootstrap.pypa.io/get-pip.py
+    python3 get-pip.py
+    cd ~
+    rm -rf ~/redinstall
+    git clone -b develop --single-branch https://github.com/Twentysix26/Red-DiscordBot.git
+    chown -R $name: Red-DiscordBot
+    echo "Done installing prerequisites and downloading the bot."
+    echo "Now do cd Red-DiscordBot followed by export PATH=\$PATH:/usr/local/Cellar/opus/1.1.2/lib/ then python3 launcher.py"
+    echo "Then select Install Requirements and select the appropriate option in that menu"
+    echo "Then you may run the bot by selecting option 1 or 2 on the main menu"
+}
 osx()
 {
     echo "Installing Red for OSX"
@@ -133,7 +184,7 @@ osx()
 }
 
 PS3='Please enter your choice: '
-options=("Ubuntu 16.04" "Alpine Linux" "ArchLinux" "CentOS 7" "Debian 8" "Fedora 25" "OpenSUSE 42.2" "OSX" "Quit")
+options=("Ubuntu 16.04" "Alpine Linux" "ArchLinux" "CentOS 7" "Debian 8" "Fedora 25" "OpenSUSE 42.2" "OSX" "Raspbian" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -163,6 +214,10 @@ do
             ;;
         "OpenSUSE 42.2")
             opensuse422
+            break
+            ;;
+        "Raspbian")
+            raspbian
             break
             ;;
         "OSX")
